@@ -26,7 +26,7 @@ local servers = {
   },
   ["lua-language-server"] = {
     pattern = { "lua" },
-    cmd = { "lua-language-server" },
+      cmd = { vim.fn.stdpath("data") .. "/mason/bin/lua-language-server" },
     settings = { Lua = { diagnostics = { globals = { "vim" } } } },
   },
 }
