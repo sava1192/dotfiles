@@ -24,6 +24,10 @@ local servers = {
     pattern = { "typescript", "javascript", "typescriptreact", "javascriptreact" }, -- where to start server
     cmd = { "typescript-language-server", "--stdio" }, -- command to start server
   },
+  ["css-lsp"] = {
+    pattern = { "css", "scss", "sass", "less" },
+    cmd = { vim.fn.stdpath("data") .. "/mason/bin/vscode-css-language-server", "--stdio" },
+  },
   ["lua-language-server"] = {
     pattern = { "lua" },
       cmd = { vim.fn.stdpath("data") .. "/mason/bin/lua-language-server" },
@@ -58,6 +62,13 @@ require("lazy").setup({
 
 -- LSP setup
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
+local mason_registry = require("mason-registry")
+
+for pkg, _ in pairs(servers) do
+  if not mason_registry.is_installed(pkg) then
+    mason_registry.get_package(pkg):install()
+  end
+end
 
 for pkg, cfg in pairs(servers) do -- register all LSPs
   vim.api.nvim_create_autocmd("FileType", {
